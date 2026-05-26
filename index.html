@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Universe Creators 3D</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --blue-deep: #020b18;
+      --blue-mid: #050f20;
+      --blue-glow: #00c8ff;
+      --blue-accent: #0066cc;
+      --blue-soft: #003a6e;
+      --white: #e8f4ff;
+    }
+
+    body {
+      min-height: 100vh;
+      background: var(--blue-deep);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Rajdhani', sans-serif;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    /* Animated starfield */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        radial-gradient(1px 1px at 10% 20%, rgba(0,200,255,0.6) 0%, transparent 100%),
+        radial-gradient(1px 1px at 30% 60%, rgba(0,200,255,0.4) 0%, transparent 100%),
+        radial-gradient(1.5px 1.5px at 50% 10%, rgba(255,255,255,0.5) 0%, transparent 100%),
+        radial-gradient(1px 1px at 70% 80%, rgba(0,200,255,0.5) 0%, transparent 100%),
+        radial-gradient(1px 1px at 85% 40%, rgba(255,255,255,0.4) 0%, transparent 100%),
+        radial-gradient(1px 1px at 20% 90%, rgba(0,200,255,0.3) 0%, transparent 100%),
+        radial-gradient(1.5px 1.5px at 60% 50%, rgba(255,255,255,0.3) 0%, transparent 100%),
+        radial-gradient(1px 1px at 92% 15%, rgba(0,200,255,0.5) 0%, transparent 100%),
+        radial-gradient(1px 1px at 40% 35%, rgba(255,255,255,0.3) 0%, transparent 100%),
+        radial-gradient(1px 1px at 75% 65%, rgba(0,200,255,0.4) 0%, transparent 100%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* Grid overlay */
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(0,200,255,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,200,255,0.03) 1px, transparent 1px);
+      background-size: 60px 60px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .container {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      max-width: 480px;
+      padding: 40px 24px 60px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0;
+    }
+
+    /* Logo */
+    .logo-wrapper {
+      position: relative;
+      margin-bottom: 24px;
+    }
+
+    .logo-ring {
+      position: absolute;
+      inset: -12px;
+      border-radius: 50%;
+      border: 1px solid rgba(0,200,255,0.3);
+      animation: spin-slow 12s linear infinite;
+    }
+
+    .logo-ring::before {
+      content: '';
+      position: absolute;
+      top: -2px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--blue-glow);
+      box-shadow: 0 0 10px var(--blue-glow), 0 0 20px var(--blue-glow);
+    }
+
+    @keyframes spin-slow {
+      from { transform: rotate(0deg); }
+      to   { transform: rotate(360deg); }
+    }
+
+    .logo-img {
+      width: 110px;
+      height: 110px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid var(--blue-glow);
+      box-shadow: 0 0 20px rgba(0,200,255,0.5), 0 0 50px rgba(0,200,255,0.2);
+      display: block;
+    }
+
+    /* Brand name */
+    .brand {
+      text-align: center;
+      margin-bottom: 6px;
+    }
+
+    .brand-name {
+      font-family: 'Orbitron', monospace;
+      font-weight: 900;
+      font-size: clamp(18px, 5vw, 24px);
+      color: var(--white);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      text-shadow: 0 0 10px rgba(0,200,255,0.6), 0 0 30px rgba(0,200,255,0.3);
+      line-height: 1.2;
+    }
+
+    .brand-name span {
+      color: var(--blue-glow);
+    }
+
+    .brand-tagline {
+      font-size: 13px;
+      color: rgba(0,200,255,0.7);
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      margin-top: 4px;
+    }
+
+    /* Divider */
+    .divider {
+      width: 200px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--blue-glow), transparent);
+      margin: 20px auto 28px;
+      position: relative;
+    }
+
+    .divider::before, .divider::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: var(--blue-glow);
+      box-shadow: 0 0 8px var(--blue-glow);
+    }
+
+    .divider::before { left: 0; }
+    .divider::after  { right: 0; }
+
+    /* Buttons */
+    .links {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .btn {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      width: 100%;
+      padding: 16px 24px;
+      border-radius: 6px;
+      text-decoration: none;
+      font-family: 'Orbitron', monospace;
+      font-weight: 700;
+      font-size: 13px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      transition: all 0.3s ease;
+      overflow: hidden;
+      cursor: pointer;
+      border: none;
+    }
+
+    .btn::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .btn:hover::before { opacity: 1; }
+
+    /* Corner accents */
+    .btn::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 6px;
+      border: 1px solid transparent;
+      transition: border-color 0.3s ease;
+    }
+
+    .btn:hover::after {
+      border-color: var(--blue-glow);
+      box-shadow: inset 0 0 20px rgba(0,200,255,0.05);
+    }
+
+    /* Site button */
+    .btn-site {
+      background: linear-gradient(135deg, rgba(0,102,204,0.2) 0%, rgba(0,50,120,0.3) 100%);
+      border: 1px solid rgba(0,200,255,0.4);
+      color: var(--white);
+      box-shadow: 0 0 15px rgba(0,200,255,0.15), inset 0 1px 0 rgba(255,255,255,0.05);
+    }
+
+    .btn-site::before {
+      background: linear-gradient(135deg, rgba(0,200,255,0.15), rgba(0,100,200,0.1));
+    }
+
+    .btn-site:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 0 30px rgba(0,200,255,0.35), 0 8px 25px rgba(0,0,0,0.4);
+      color: var(--blue-glow);
+    }
+
+    /* WhatsApp button */
+    .btn-whatsapp {
+      background: linear-gradient(135deg, rgba(0,180,60,0.15) 0%, rgba(0,80,30,0.25) 100%);
+      border: 1px solid rgba(0,230,100,0.35);
+      color: var(--white);
+      box-shadow: 0 0 15px rgba(0,230,100,0.1), inset 0 1px 0 rgba(255,255,255,0.05);
+    }
+
+    .btn-whatsapp::before {
+      background: linear-gradient(135deg, rgba(0,230,100,0.12), rgba(0,150,60,0.08));
+    }
+
+    .btn-whatsapp:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 0 30px rgba(0,230,100,0.3), 0 8px 25px rgba(0,0,0,0.4);
+      color: #00e664;
+    }
+
+    .btn-whatsapp::after {
+      border-color: transparent;
+    }
+
+    .btn-whatsapp:hover::after {
+      border-color: rgba(0,230,100,0.6);
+    }
+
+    /* Icon inside button */
+    .btn-icon {
+      width: 20px;
+      height: 20px;
+      flex-shrink: 0;
+      fill: currentColor;
+    }
+
+    /* Scan line animation */
+    .btn-site .scan {
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 60%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(0,200,255,0.08), transparent);
+      animation: scan 3s ease-in-out infinite;
+    }
+
+    @keyframes scan {
+      0%   { left: -100%; }
+      100% { left: 200%; }
+    }
+
+    /* Footer */
+    .footer {
+      margin-top: 40px;
+      text-align: center;
+    }
+
+    .footer-text {
+      font-size: 11px;
+      color: rgba(0,200,255,0.3);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    /* Glow orb background */
+    .orb {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(80px);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .orb-1 {
+      width: 400px;
+      height: 400px;
+      background: radial-gradient(circle, rgba(0,80,200,0.18) 0%, transparent 70%);
+      top: -100px;
+      right: -100px;
+      animation: float1 8s ease-in-out infinite;
+    }
+
+    .orb-2 {
+      width: 300px;
+      height: 300px;
+      background: radial-gradient(circle, rgba(0,150,255,0.12) 0%, transparent 70%);
+      bottom: -80px;
+      left: -80px;
+      animation: float2 10s ease-in-out infinite;
+    }
+
+    @keyframes float1 {
+      0%, 100% { transform: translate(0, 0); }
+      50%       { transform: translate(-20px, 20px); }
+    }
+
+    @keyframes float2 {
+      0%, 100% { transform: translate(0, 0); }
+      50%       { transform: translate(20px, -15px); }
+    }
+
+    /* Pulse ring on logo hover */
+    .logo-wrapper:hover .logo-img {
+      box-shadow: 0 0 30px rgba(0,200,255,0.8), 0 0 70px rgba(0,200,255,0.4);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+
+  <div class="container">
+
+    <!-- Logo -->
+    <div class="logo-wrapper">
+      <div class="logo-ring"></div>
+      <img
+        class="logo-img"
+        src="https://i.imgur.com/HbXNS6M.png"
+        alt="Universe Creators 3D Logo"
+        onerror="this.style.display='none'"
+      />
+    </div>
+
+    <!-- Brand -->
+    <div class="brand">
+      <div class="brand-name">Universe <span>Creators</span> 3D</div>
+      <div class="brand-tagline">Imprimimos uma parte do seu universo</div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- Links -->
+    <div class="links">
+
+      <!-- Website -->
+      <a class="btn btn-site" href="https://3duniversecreators.netlify.app/" target="_blank" rel="noopener">
+        <span class="scan"></span>
+        <svg class="btn-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/>
+        </svg>
+        Acessar o Site
+      </a>
+
+      <!-- WhatsApp -->
+      <a
+        class="btn btn-whatsapp"
+        href="https://wa.me/5511983031609"
+        target="_blank"
+        rel="noopener"
+      >
+        <svg class="btn-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+        </svg>
+        Entrar em Contato
+      </a>
+
+    </div>
+
+    <div class="footer">
+      <p class="footer-text">© 2026 Universe Creators 3D</p>
+    </div>
+
+  </div>
+
+</body>
+</html>
