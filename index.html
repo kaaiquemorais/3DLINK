@@ -124,11 +124,18 @@
     }
 
     .logo-img {
-      width: 130px;
-      height: 130px;
-      object-fit: contain;
+      width: 110px;
+      height: 110px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid var(--blue-glow);
+      box-shadow: 0 0 20px rgba(0,200,255,0.5), 0 0 50px rgba(0,200,255,0.2);
       display: block;
       mix-blend-mode: screen;
+    }
+
+    .logo-wrapper:hover .logo-img {
+      box-shadow: 0 0 30px rgba(0,200,255,0.8), 0 0 70px rgba(0,200,255,0.4);
     }
 
     /* Brand name */
